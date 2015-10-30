@@ -1,0 +1,17 @@
+@(contactForm: Form[models.Contact])
+
+@*
+@val value =0
+*@
+
+@helper.form(routes.Application.send_invite()){
+    @*
+    * Here contactForm("contactType") assumes that you want to map the
+    * ContactType selected to a field in a Contact class (which we've
+    * wrapped in play.data.Form<T> so that the fields in Contact become
+    * inputs in our form
+    *@
+    @helper.select(contactForm("name"), helper.options(ContactType.options()))
+
+    <input type="submit" value="Login" />
+}

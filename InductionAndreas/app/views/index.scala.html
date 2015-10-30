@@ -1,0 +1,9 @@
+@(message: String)
+
+@main(message) {
+    <a href="@routes.Application.search_student()">Nach Studenten suchen</a><br/>
+    <a href="@routes.Application.choose_student()">Studenten aus Liste ausw&auml;hlen</a><br/>
+    <a href="@routes.Application.send_invite()">Einladung versenden</a><br/>
+    <a href="@routes.Application.choose_invite()">Erhaltene Einladungen</a><br/>
+    <a href="@routes.Application.accept_invite()">Einladung annehmen</a>
+}

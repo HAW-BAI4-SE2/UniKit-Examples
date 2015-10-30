@@ -1,0 +1,48 @@
+@(veranstaltungsList: List[veranstaltungen.interfaces.Veranstaltung], 
+  currentUser: se2.studenten.interfaces.Student)
+
+
+
+<h1> Anmeldungen </h1>
+<p>Nutzer: @currentUser.getFirstname() @currentUser.getLastname</p>
+<td> 
+			@helper.form(action=routes.Application.allMyCourses()){
+			<button type="submit" name="allMyCourses" value="@currentUser"> meine Veranstaltungen </button> }</td>
+<h2> Veranstaltungen </h2>
+<table> 
+	<tr>
+	  <th> Titel </th>
+	  <th> Abkürzung </th>
+	   <th></th>
+	   <th></th>
+		<th></th>
+	  <th> Teilnehmerliste </th>
+	  <th></th>
+	  <th></th>
+
+	</tr>
+		@for(veranstaltung <- veranstaltungsList) {
+		<tr>
+			<td> @veranstaltung.getIdentifier() </td>
+			<td> @veranstaltung.getShorthandSymbol() </td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td> 
+			@helper.form(action=routes.Application.watchParticipants){
+			<button type="submit" name="watchParticipants" value="@veranstaltung.getIdentifier()"> ansehen </button> }</td>
+			@if(!anmelden.anmelden.studentTakespart(currentUser, veranstaltung)) {
+			<td> 
+			@helper.form(action=routes.Application.takepart()){
+			<button type="submit" name="takepart" value="@veranstaltung.getIdentifier()"> anmelden </button> }</td>
+			} else {
+			<td> 
+			@helper.form(action=routes.Application.signOut()){
+			<button type="submit" name="signOut" value="@veranstaltung.getIdentifier()"> abmelden </button> }</td>
+			}
+		</tr>
+		}
+</table>
+
+
+
