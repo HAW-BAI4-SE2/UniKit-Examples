@@ -1,25 +1,20 @@
-import generators.*;
-import net.unikit.database.common.implementations.DatabaseConfigurationUtils;
-import net.unikit.database.common.interfaces.DatabaseConfiguration;
-import net.unikit.database.external.implementations.ImportDatabaseManagerFactory;
-import net.unikit.database.external.interfaces.ImportDatabaseManager;
-
-import java.io.IOException;
+import net.unikit.database.interfaces.DatabaseManager;
+import utils.DatabaseConfiguration;
+import utils.DatabaseUtils;
 
 /**
- * Created by Andreas on 02.11.2015.
+ * Created by Andreas on 29.12.2015.
  */
 public class Main {
-    public static void main(String[] args) throws IOException {
-        DatabaseConfiguration databaseConfigurationExternal =
-                DatabaseConfigurationUtils.createDatabaseConfigurationFromProperties("database_external.properties");
-        ImportDatabaseManager databaseManagerExternal =
-                ImportDatabaseManagerFactory.createDatabaseManager(databaseConfigurationExternal);
+    public static void createDatabase(DatabaseConfiguration databaseConfiguration) {
+        DatabaseManager databaseManager = DatabaseUtils.createDatabaseManager(databaseConfiguration);
+    }
 
-        FieldOfStudyGenerator.main(databaseManagerExternal);
-        CourseGenerator.main(databaseManagerExternal);
-        CourseGroupGenerator.main(databaseManagerExternal);
-        AppointmentGenerator.main(databaseManagerExternal);
-        StudentGenerator.main(databaseManagerExternal);
+    public static void main(String[] args) {
+        DatabaseConfiguration databaseConfiguration = DatabaseConfiguration.create();
+        databaseConfiguration.setExternalSchema("external_database23");
+        databaseConfiguration.setInternalSchema("internal_database23");
+
+        createDatabase(databaseConfiguration);
     }
 }
