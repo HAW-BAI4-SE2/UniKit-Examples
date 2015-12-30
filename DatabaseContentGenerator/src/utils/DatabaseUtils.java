@@ -1,10 +1,10 @@
 package utils;
 
+import main.Main;
 import net.unikit.database.implementations.DatabaseManagerFactory;
 import net.unikit.database.interfaces.DatabaseConfiguration;
 import net.unikit.database.interfaces.DatabaseManager;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -35,18 +35,16 @@ public final class DatabaseUtils {
     private static DatabaseManager init(utils.DatabaseConfiguration databaseConfiguration) {
         System.err.println("Loading configurations...");
 
-        String externalConfigurationFile = "conf" + File.separator + "database_external.properties";
         DatabaseConfiguration configurationExternal = null;
         try {
-            configurationExternal = createDatabaseConfigurationFromProperties(externalConfigurationFile);
+            configurationExternal = createDatabaseConfigurationFromProperties(Main.EXTERNAL_DATABASE_CONFIGURATION_FILE);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        String internalConfigurationFile = "conf" + File.separator + "database_internal.properties";
         DatabaseConfiguration configurationInternal = null;
         try {
-            configurationInternal = createDatabaseConfigurationFromProperties(internalConfigurationFile);
+            configurationInternal = createDatabaseConfigurationFromProperties(Main.INTERNAL_DATABASE_CONFIGURATION_FILE);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -64,11 +62,11 @@ public final class DatabaseUtils {
     }
 
     /**
-     * Resets the test database using the <i>all_in_one.sql</i> template.
+     * Resets the test database using the initialize template.
      */
     private static void resetDatabase(DatabaseManager databaseManager, utils.DatabaseConfiguration databaseConfiguration) {
-        Path inputPath = Paths.get("assets" + File.separator + "all_in_one.sql");
-        Path outputPath = Paths.get("assets" + File.separator + "all_in_one_temp.sql");
+        Path inputPath = Paths.get(Main.DATABASE_INITIALIZE_TEMPLATE_FILE);
+        Path outputPath = Paths.get(Main.DATABASE_INITIALIZE_TEMPORARY_FILE);
 
         // Read content of template file
         Charset charset = StandardCharsets.UTF_8;
@@ -80,8 +78,8 @@ public final class DatabaseUtils {
         }
 
         // Replace template variables
-        content = content.replaceAll(Pattern.quote("EXTERNAL_DATABASE_SCHEMA"), databaseConfiguration.getExternalSchema());
-        content = content.replaceAll(Pattern.quote("INTERNAL_DATABASE_SCHEMA"), databaseConfiguration.getInternalSchema());
+        content = content.replaceAll(Pattern.quote(Main.TEMPLATE_EXTERNAL_SCHEMA_DUMMY), databaseConfiguration.getExternalSchema());
+        content = content.replaceAll(Pattern.quote(Main.TEMPLATE_INTERNAL_SCHEMA_DUMMY), databaseConfiguration.getInternalSchema());
 
         // Write content to temporary file
         try {
